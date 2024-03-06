@@ -1,0 +1,5 @@
+.direnv
+.devenv
+.idea
+result
+.pre-commit-config.yaml
