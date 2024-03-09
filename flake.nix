@@ -20,6 +20,9 @@
         # █░▀█ █ █░█ █▄▄ ██▄ ░█░ ▄█
         nixlets = {
           # <name> = utils.mkNixlet ./nixlets/<name>;
+          mosquitto = utils.mkNixlet ./nixlets/mosquitto;
+          attic = utils.mkNixlet ./nixlets/attic;
+          postgres = utils.mkNixlet ./nixlets/postgres;
         };
       };
       perSystem = {
