@@ -8,6 +8,7 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.devenv.flakeModule
+        inputs.nix-gitlab-ci.flakeModule
       ];
       systems = import systems;
       flake = rec {
@@ -31,6 +32,9 @@
         inputs',
         ...
       }: {
+        imports = [
+          ./ci.nix
+        ];
         formatter = pkgs.alejandra;
         devenv.shells.default = {
           containers = pkgs.lib.mkForce {};
@@ -82,6 +86,7 @@
       inputs.pre-commit-hooks.follows = "pre-commit-hooks";
     };
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
+    nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci";
 
     kubenix = {
       url = "github:hall/kubenix";

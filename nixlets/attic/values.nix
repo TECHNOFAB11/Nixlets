@@ -25,6 +25,16 @@ with lib; {
         default = "latest";
       };
     };
+    service = utils.mkNestedOption {
+      port = mkOption {
+        type = types.int;
+        default = 5432;
+      };
+      type = mkOption {
+        type = types.str;
+        default = "ClusterIP";
+      };
+    };
     configToml = mkOption {
       type = types.str;
       default = ''
