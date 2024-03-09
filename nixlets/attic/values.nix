@@ -35,6 +35,15 @@ with lib; {
         default = "ClusterIP";
       };
     };
+    storage = mkOption {
+      type = types.str;
+      default = "5G";
+    };
+    externalStorage = mkOption {
+      type = types.bool;
+      default = false;
+      description = "This does not deploy a PVC for atticd so an external storage configuration can be used";
+    };
     configToml = mkOption {
       type = types.str;
       default = ''

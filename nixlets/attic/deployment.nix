@@ -1,4 +1,8 @@
-{values, ...}: {
+{
+  values,
+  lib,
+  ...
+}: {
   kubernetes.resources = {
     deployments."${values.uniqueName}" = {
       spec = {
@@ -21,6 +25,10 @@
                   mountPath = "/etc/attic";
                   readOnly = true;
                 };
+                "data" = lib.mkIf (!values.externalStorage) {
+                  name = "data";
+                  mountPath = "/data";
+                };
               };
             };
             volumes = {
@@ -33,6 +41,7 @@
                   }
                 ];
               };
+              "data".persistentVolumeClaim.claimName = lib.mkIf (!values.externalStorage) "${values.uniqueName}-data";
             };
           };
         };
