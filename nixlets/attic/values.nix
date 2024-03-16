@@ -88,7 +88,7 @@ with lib; {
         # Set this to the Base64 encoding of some random data.
         # You can also set it via the `ATTIC_SERVER_TOKEN_HS256_SECRET_BASE64` environment
         # variable.
-        token-hs256-secret-base64 = ""
+        #token-hs256-secret-base64 = ""
 
         # Database connection
         [database]
