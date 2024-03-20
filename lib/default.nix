@@ -63,6 +63,7 @@ with lib; {
           k8s
           helm
           docker
+          files
           (nixlet {
             # all these args are available in values.nix
             inherit project;

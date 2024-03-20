@@ -89,7 +89,7 @@
     nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci";
 
     kubenix = {
-      url = "github:hall/kubenix";
+      url = "github:TECHNOFAB11/kubenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

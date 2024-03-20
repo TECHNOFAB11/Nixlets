@@ -327,15 +327,15 @@
         "treefmt": "treefmt"
       },
       "locked": {
-        "lastModified": 1705801181,
-        "narHash": "sha256-vH+n5qMnwFCx3LMON2hQMi9PjMpmTraGYXe1czJTfAg=",
-        "owner": "hall",
+        "lastModified": 1709908607,
+        "narHash": "sha256-cG5PftryvQT5vTtRJGGsnfFgdobaUmD2klVVhzddFiU=",
+        "owner": "TECHNOFAB11",
         "repo": "kubenix",
-        "rev": "76b8053b27b062b11f0c9b495050cc55606ac9dc",
+        "rev": "ddfdd8d0903acff4a0a52b84e4395da1778dcc4c",
         "type": "github"
       },
       "original": {
-        "owner": "hall",
+        "owner": "TECHNOFAB11",
         "repo": "kubenix",
         "type": "github"
       }
