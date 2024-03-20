@@ -54,7 +54,7 @@ with lib; {
     system,
     project,
     nixlet,
-    values,
+    values ? {},
     overrides ? {...}: {},
   }:
     (inputs.kubenix.evalModules.${system} {
