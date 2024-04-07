@@ -17,8 +17,8 @@
           inherit inputs;
         };
 
-        # █▄░█ █ ▀▄▀ █░░ █▀▀ ▀█▀ █▀
-        # █░▀█ █ █░█ █▄▄ ██▄ ░█░ ▄█
+        # █▄░█ █ ▀▄▀ █░░ █▀▀ ▀█▀ █▀
+        # █░▀█ █ █░█ █▄▄ ██▄ ░█░ ▄█
         nixlets = {
           # <name> = utils.mkNixlet ./nixlets/<name>;
           mosquitto = utils.mkNixlet ./nixlets/mosquitto;
