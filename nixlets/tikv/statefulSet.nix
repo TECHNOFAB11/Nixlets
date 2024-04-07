@@ -6,7 +6,10 @@
       serviceName = "${values.uniqueName}-pd";
       updateStrategy.type = "RollingUpdate";
       template = {
-        metadata.labels.name = "${values.uniqueName}-pd";
+        metadata.labels = rec {
+          name = "${values.uniqueName}-pd";
+          app = name;
+        };
         spec = {
           containers."pd" = {
             image = "${values.pd.image.repository}:${values.pd.image.tag}";
