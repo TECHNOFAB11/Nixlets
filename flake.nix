@@ -24,6 +24,7 @@
           mosquitto = utils.mkNixlet ./nixlets/mosquitto;
           attic = utils.mkNixlet ./nixlets/attic;
           postgres = utils.mkNixlet ./nixlets/postgres;
+          tikv = utils.mkNixlet ./nixlets/tikv;
         };
       };
       perSystem = {
