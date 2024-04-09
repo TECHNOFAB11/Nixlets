@@ -19,7 +19,7 @@ with lib; {
         };
         tag = mkOption {
           type = types.str;
-          default = "latest";
+          default = "v7.1.0";
         };
         pullPolicy = mkOption {
           type = types.str;
@@ -31,7 +31,7 @@ with lib; {
           type = types.int;
           default = 2380;
         };
-        client_port = mkOption {
+        port = mkOption {
           type = types.int;
           default = 2379;
         };
@@ -39,6 +39,10 @@ with lib; {
           type = types.str;
           default = "ClusterIP";
         };
+      };
+      storage = mkOption {
+        type = types.str;
+        default = "5G";
       };
     };
     tikv = utils.mkNestedOption {
@@ -53,7 +57,7 @@ with lib; {
         };
         tag = mkOption {
           type = types.str;
-          default = "latest";
+          default = "v7.1.0";
         };
         pullPolicy = mkOption {
           type = types.str;
@@ -61,9 +65,13 @@ with lib; {
         };
       };
       service = utils.mkNestedOption {
-        client_port = mkOption {
+        port = mkOption {
           type = types.int;
           default = 20160;
+        };
+        status_port = mkOption {
+          type = types.int;
+          default = 20180;
         };
         type = mkOption {
           type = types.str;
@@ -73,6 +81,14 @@ with lib; {
       storage = mkOption {
         type = types.str;
         default = "5G";
+      };
+      config = mkOption {
+        type = types.attrs;
+        default = {
+          raftdb.max-open-files = 256;
+          rocksdb.max-open-files = 256;
+          storage.reserve-space = "0MB";
+        };
       };
     };
 
