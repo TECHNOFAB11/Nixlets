@@ -1,4 +1,5 @@
-{values, ...}: {
+{nixlet, ...}:
+with nixlet; {
   kubernetes.resources = {
     statefulSets."${values.uniqueName}".spec = {
       replicas = values.replicaCount;

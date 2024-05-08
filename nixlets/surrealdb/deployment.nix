@@ -1,8 +1,9 @@
 {
-  values,
+  nixlet,
   lib,
   ...
-}: {
+}:
+with nixlet; {
   kubernetes.resources = {
     deployments."${values.uniqueName}" = {
       spec = {

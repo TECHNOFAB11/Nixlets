@@ -1,4 +1,5 @@
-{values, ...}: {
+{nixlet, ...}:
+with nixlet; {
   kubernetes.resources = {
     services."${values.uniqueName}" = {
       spec = {

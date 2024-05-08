@@ -1,8 +1,9 @@
 {
-  values,
+  nixlet,
   lib,
   ...
-}: {
+}:
+with nixlet; {
   kubernetes.resources = let
     # switch to a StatefulSet if we don't use an external storage configuration
     type =

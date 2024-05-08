@@ -1,17 +1,19 @@
 {
   lib,
   utils,
-  project,
+  nixlet,
   ...
 }:
-with lib; {
+with lib;
+with utils;
+with nixlet; {
   # for some basic values see https://github.com/helm/examples/blob/4888ba8fb8180dd0c36d1e84c1fcafc6efd81532/charts/hello-world/values.yaml
   options = {
     replicaCount = mkOption {
       type = types.int;
       default = 1;
     };
-    image = utils.mkNestedOption {
+    image = mkNestedOption {
       repository = mkOption {
         type = types.str;
         default = "surrealdb/surrealdb";
@@ -25,7 +27,7 @@ with lib; {
         default = "latest";
       };
     };
-    service = utils.mkNestedOption {
+    service = mkNestedOption {
       port = mkOption {
         type = types.int;
         default = 8000;
@@ -35,7 +37,7 @@ with lib; {
         default = "ClusterIP";
       };
     };
-    surrealdb = utils.mkNestedOption {
+    surrealdb = mkNestedOption {
       log = mkOption {
         type = types.str;
         default = "info";
