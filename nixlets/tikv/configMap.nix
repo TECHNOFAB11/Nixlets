@@ -1,8 +1,9 @@
 {
-  values,
+  nixlet,
   pkgs,
   ...
-}: let
+}:
+with nixlet; let
   tomlFormat = pkgs.formats.toml {};
 in {
   kubernetes.resources = {

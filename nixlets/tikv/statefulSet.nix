@@ -1,4 +1,5 @@
-{values, ...}: {
+{nixlet, ...}:
+with nixlet; {
   kubernetes.resources = {
     /*
     Placement Driver

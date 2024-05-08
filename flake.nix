@@ -2,6 +2,7 @@
   outputs = {
     self,
     flake-parts,
+    nixlet-lib,
     systems,
     ...
   } @ inputs:
@@ -11,24 +12,19 @@
         inputs.nix-gitlab-ci.flakeModule
       ];
       systems = import systems;
-      flake = rec {
-        utils = import ./lib {
-          inherit (inputs.nixpkgs) lib;
-          inherit inputs;
-        };
-
-        # █▄░█ █ ▀▄▀ █░░ █▀▀ ▀█▀ █▀
-        # █░▀█ █ █░█ █▄▄ ██▄ ░█░ ▄█
-        nixlets = {
-          # <name> = utils.mkNixlet ./nixlets/<name>;
-          mosquitto = utils.mkNixlet ./nixlets/mosquitto;
-          attic = utils.mkNixlet ./nixlets/attic;
-          postgres = utils.mkNixlet ./nixlets/postgres;
-          tikv = utils.mkNixlet ./nixlets/tikv;
-          surrealdb = utils.mkNixlet ./nixlets/surrealdb;
+      flake = {
+        # █▄ █ █ ▀▄▀ █   █▀▀ ▀█▀ █▀
+        # █ ▀█ █ █ █ █▄▄ ██▄  █  ▄█
+        nixlets = with nixlet-lib; {
+          mosquitto = mkNixlet ./nixlets/mosquitto;
+          attic = mkNixlet ./nixlets/attic;
+          postgres = mkNixlet ./nixlets/postgres;
+          tikv = mkNixlet ./nixlets/tikv;
+          surrealdb = mkNixlet ./nixlets/surrealdb;
         };
       };
       perSystem = {
+        lib,
         pkgs,
         system,
         inputs',
@@ -54,11 +50,9 @@
         # check if every nixlet successfully renders with default values
         checks =
           builtins.mapAttrs (
-            name: nixlet:
-              self.utils.renderNixlet {
-                inherit system nixlet;
-                project = name;
-                values = {};
+            _: nixlet:
+              nixlet.render {
+                inherit system;
               }
           )
           self.nixlets;
@@ -66,14 +60,20 @@
         # allow directly building every nixlet with default values
         packages =
           builtins.mapAttrs (
-            name: nixlet:
-              self.utils.renderNixlet {
-                inherit system nixlet;
-                project = name;
-                values = {};
+            _: nixlet:
+              nixlet.render {
+                inherit system;
               }
           )
           self.nixlets;
+
+        apps.upload = {
+          type = "app";
+          program = pkgs.callPackage nixlet-lib.uploadNixletsToGitlab {
+            projectId = "55602785";
+            nixlets = lib.attrValues self.nixlets;
+          };
+        };
       };
     };
 
@@ -94,5 +94,6 @@
       url = "github:TECHNOFAB11/kubenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixlet-lib.url = "path:lib";
   };
 }
