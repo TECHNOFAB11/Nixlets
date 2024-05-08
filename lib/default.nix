@@ -113,7 +113,7 @@ with lib; rec {
               echo "> Skipped ${name}@${version} because it already exists in the Package Registry"
             else
               echo "> Uploading new version ${name}@${version}"
-              ${pkgs.gnutar}/bin/tar -czf /tmp/${name}.tar.gz --mode='u+rwX' -C ${path} .
+              ${pkgs.gnutar}/bin/tar -czf /tmp/${name}.tar.gz --mode='u+rwX' -C ${path} --transform 's/^\./\/${name}/' .
               ${pkgs.curl}/bin/curl --header "$AUTH_HEADER" --upload-file "/tmp/${name}.tar.gz" "$URL"; echo;
               ${pkgs.coreutils}/bin/rm -f /tmp/${nixlet.name}.tar.gz
               echo "> Finished ${name}@${version}, see above"
