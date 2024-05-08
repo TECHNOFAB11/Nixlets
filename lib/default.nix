@@ -91,6 +91,15 @@ with lib; rec {
   };
 
   fetchNixlet = url: sha256: mkNixlet (builtins.fetchTarball {inherit url sha256;});
+  fetchNixletFromGitlab = {
+    project,
+    name,
+    version,
+    sha256,
+  }: let
+    projectEscaped = builtins.replaceStrings ["/"] ["%2F"] project;
+  in
+    fetchNixlet "https://gitlab.com/api/v4/projects/${projectEscaped}/packages/generic/${name}/${version}/${name}.tar.gz" sha256;
 
   uploadNixletsToGitlab = {
     pkgs,
