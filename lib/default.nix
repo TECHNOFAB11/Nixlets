@@ -118,7 +118,7 @@ with lib; rec {
         builtins.map (nixlet:
           with nixlet; ''
             URL="https://gitlab.com/api/v4/projects/${projectId}/packages/generic/${name}/${version}/${name}.tar.gz"
-            if curl --output /dev/null --silent --head --fail --header "$AUTH_HEADER" $URL; then
+            if ${pkgs.curl}/bin/curl --output /dev/null --silent --head --fail --header "$AUTH_HEADER" $URL; then
               echo "> Skipped ${name}@${version} because it already exists in the Package Registry"
             else
               echo "> Uploading new version ${name}@${version}"
