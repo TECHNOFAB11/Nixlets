@@ -1,15 +1,21 @@
 {
   outputs = {
     self,
+    nixpkgs,
     flake-parts,
-    nixlet-lib,
     systems,
     ...
-  } @ inputs:
+  } @ inputs: let
+    nixlet-lib = import ./lib {
+      inherit (nixpkgs) lib;
+      inherit (inputs) kubenix;
+    };
+  in
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.devenv.flakeModule
         inputs.nix-gitlab-ci.flakeModule
+        inputs.treefmt-nix.flakeModule
       ];
       systems = import systems;
       flake = {
@@ -26,24 +32,29 @@
       perSystem = {
         lib,
         pkgs,
+        config,
         system,
-        inputs',
         ...
       }: {
         imports = [
           ./ci.nix
         ];
-        formatter = pkgs.alejandra;
+        treefmt = {
+          projectRootFile = "flake.nix";
+          programs = {
+            alejandra.enable = true;
+            mdformat.enable = true;
+          };
+        };
         devenv.shells.default = {
-          containers = pkgs.lib.mkForce {};
+          containers = lib.mkForce {};
           packages = with pkgs; [
             kube-linter
           ];
 
-          pre-commit = {
-            hooks = {
-              alejandra.enable = true;
-            };
+          pre-commit.hooks.treefmt = {
+            enable = true;
+            packageOverrides.treefmt = config.treefmt.build.wrapper;
           };
         };
 
@@ -85,15 +96,20 @@
     systems.url = "github:nix-systems/default-linux";
     devenv = {
       url = "github:cachix/devenv";
-      inputs.pre-commit-hooks.follows = "pre-commit-hooks";
+      inputs.git-hooks.follows = "git-hooks";
     };
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-    nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci";
+    git-hooks.url = "github:cachix/git-hooks.nix";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci?dir=lib";
 
     kubenix = {
       url = "github:TECHNOFAB11/kubenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixlet-lib.url = "path:lib";
+  };
+
+  nixConfig = {
+    extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
+    extra-substituters = "https://devenv.cachix.org";
   };
 }
