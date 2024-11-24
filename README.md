@@ -5,16 +5,18 @@ Nixlets are kinda like Helm Charts, but they are defined using Kubenix and the N
 \
 One can load Nixlets either via Nix Flakes or by fetching a tarball
 
-
 ## Usage
 
 ### Creating Nixlets
+
 Nixlets need a `default.nix` and a `values.nix` (a `nixlet.nix` containing the metadata is also recommended). \
 Check out the existing [nixlets](./nixlets/) to understand how they work. \
 There is also a bare-bones [template](./template/).
 
 ### Using/rendering Nixlets
+
 To render nixlets you only need to import the nixlets-lib:
+
 ```nix
 {
   inputs.nixlet-lib.url = "gitlab:TECHNOFAB/nixlets?dir=lib";
@@ -22,6 +24,7 @@ To render nixlets you only need to import the nixlets-lib:
 ```
 
 #### Nixlets stored in the Gitlab Package Registry
+
 ```nix
 (nixlet-lib.fetchNixletFromGitlab {
   project = "TECHNOFAB/nixlets";
@@ -37,6 +40,7 @@ To render nixlets you only need to import the nixlets-lib:
 ```
 
 #### Nixlets fetchable from arbitrary URLs
+
 ```nix
 (nixlet-lib.fetchNixlet "<URL>" "<sha>").render {
   # ...
@@ -44,7 +48,9 @@ To render nixlets you only need to import the nixlets-lib:
 ```
 
 #### Metadata
+
 Metadata of the Nixlets can also easily be accessed if needed:
+
 ```nix
 (<some nixlet>).description # version, name, etc.
 ```
