@@ -2,14 +2,13 @@
   description = "Nixlets lib";
 
   outputs = {
-    self,
     nixpkgs,
     kubenix,
     ...
-  } @ inputs:
+  }:
     import ./. {
       inherit (nixpkgs) lib;
-      inherit inputs;
+      inherit kubenix;
     };
 
   inputs = {

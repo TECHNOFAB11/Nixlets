@@ -1,6 +1,6 @@
 {
-  inputs,
   lib,
+  kubenix,
   ...
 } @ attrs:
 with lib; rec {
@@ -60,7 +60,7 @@ with lib; rec {
           inherit name project version description;
         };
       in
-        (inputs.kubenix.evalModules.${system} {
+        (kubenix.evalModules.${system} {
           module = {kubenix, ...}: {
             imports = with kubenix.modules; [
               k8s
