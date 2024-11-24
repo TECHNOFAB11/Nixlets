@@ -19,15 +19,7 @@
       ];
       systems = import systems;
       flake = {
-        # █▄ █ █ ▀▄▀ █   █▀▀ ▀█▀ █▀
-        # █ ▀█ █ █ █ █▄▄ ██▄  █  ▄█
-        nixlets = with nixlet-lib; {
-          mosquitto = mkNixlet ./nixlets/mosquitto;
-          attic = mkNixlet ./nixlets/attic;
-          postgres = mkNixlet ./nixlets/postgres;
-          tikv = mkNixlet ./nixlets/tikv;
-          surrealdb = mkNixlet ./nixlets/surrealdb;
-        };
+        nixlets = import ./nixlets {inherit nixlet-lib;};
       };
       perSystem = {
         lib,

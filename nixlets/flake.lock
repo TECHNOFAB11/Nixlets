@@ -1,0 +1,122 @@
+{
+  "nodes": {
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1673956053,
+        "narHash": "sha256-4gtG9iQuiKITOjNQQeQIpoIB6b16fm+504Ch3sNKLd8=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "35bb57c0c8d8b62bbfd284272c928ceb64ddbde9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+    "kubenix": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "nixpkgs": [
+          "nixlet-lib",
+          "nixpkgs"
+        ],
+        "systems": "systems",
+        "treefmt": "treefmt"
+      },
+      "locked": {
+        "lastModified": 1709908607,
+        "narHash": "sha256-cG5PftryvQT5vTtRJGGsnfFgdobaUmD2klVVhzddFiU=",
+        "owner": "TECHNOFAB11",
+        "repo": "kubenix",
+        "rev": "ddfdd8d0903acff4a0a52b84e4395da1778dcc4c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "TECHNOFAB11",
+        "repo": "kubenix",
+        "type": "github"
+      }
+    },
+    "nixlet-lib": {
+      "inputs": {
+        "kubenix": "kubenix",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "dir": "lib",
+        "lastModified": 1715604447,
+        "narHash": "sha256-nwfMNUjTUyOeFEet4ChZjXiBnKbudOaJiNltZ+acJUo=",
+        "owner": "technofab",
+        "repo": "nixlets",
+        "rev": "97348a70ece7f6e48f1f3c4537c3500fe0510d34",
+        "type": "gitlab"
+      },
+      "original": {
+        "id": "nixlet-lib",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1715037484,
+        "narHash": "sha256-OUt8xQFmBU96Hmm4T9tOWTu4oCswCzoVl+pxSq/kiFc=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "ad7efee13e0d216bf29992311536fce1d3eefbef",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixlet-lib": "nixlet-lib"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "id": "systems",
+        "type": "indirect"
+      }
+    },
+    "treefmt": {
+      "inputs": {
+        "nixpkgs": [
+          "nixlet-lib",
+          "kubenix",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1688026376,
+        "narHash": "sha256-qJmkr9BWDpqblk4E9/rCsAEl39y2n4Ycw6KRopvpUcY=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "df3f32b0cc253dfc7009b7317e8f0e7ccd70b1cf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
