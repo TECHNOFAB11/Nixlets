@@ -4,6 +4,6 @@
   outputs = import ./.;
 
   inputs = {
-    nixlet-lib = "gitlab:technofab/nixlets?dir=lib";
+    nixlet-lib.url = "gitlab:technofab/nixlets?dir=lib";
   };
 }
