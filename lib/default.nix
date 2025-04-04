@@ -44,11 +44,9 @@ with lib; rec {
     description ? "",
     defaultProject ? null,
     ...
-  }: let
-    # TODO: just like with the values check the args here with the options system?
-  in {
+  }: rec {
     inherit name version description path;
-    render = {
+    eval = {
       system,
       project ? defaultProject,
       overrides ? ({...}: {}),
@@ -59,35 +57,43 @@ with lib; rec {
         nixletArg = {
           inherit name project version description;
         };
-      in
-        (kubenix.evalModules.${system} {
-          module = {kubenix, ...}: {
-            imports = with kubenix.modules; [
-              k8s
-              helm
-              docker
-              files
-              ({...}: let
-                finalValues = mkValues "${path}/values.nix" {
-                  rawValues = values;
-                  nixlet = nixletArg;
-                };
-              in {
-                imports = [path];
-                _module.args.nixlet =
-                  {
-                    values = finalValues;
-                  }
-                  // nixletArg;
-              })
-              overrides
-            ];
-            kubenix.project = project;
-          };
-        })
-        .config
-        .kubernetes
-        .resultYAML;
+      in (kubenix.evalModules.${system} {
+        module = {kubenix, ...}: {
+          imports = with kubenix.modules; [
+            k8s
+            helm
+            docker
+            files
+            ({...}: let
+              finalValues = mkValues "${path}/values.nix" {
+                rawValues = values;
+                nixlet = nixletArg;
+              };
+            in {
+              imports = [path];
+              _module.args.nixlet =
+                {
+                  values = finalValues;
+                }
+                // nixletArg;
+            })
+            overrides
+          ];
+          kubenix.project = project;
+        };
+      });
+    render = {
+      system,
+      project ? defaultProject,
+      overrides ? ({...}: {}),
+      values ? {},
+    }:
+      (eval {
+        inherit system project overrides values;
+      })
+      .config
+      .kubernetes
+      .resultYAML;
   };
 
   fetchNixlet = url: sha256: mkNixlet (builtins.fetchTarball {inherit url sha256;});
