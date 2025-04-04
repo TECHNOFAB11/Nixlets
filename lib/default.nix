@@ -64,6 +64,7 @@ with lib; rec {
             helm
             docker
             files
+            ./secretsModule.nix
             ({...}: let
               finalValues = mkValues "${path}/values.nix" {
                 rawValues = values;
@@ -94,6 +95,8 @@ with lib; rec {
       .config
       .kubernetes
       .resultYAML;
+    # combines all secrets files in a single directory
+    secrets = args: (eval args).config.kubernetes.secretsCombined;
   };
 
   fetchNixlet = url: sha256: mkNixlet (builtins.fetchTarball {inherit url sha256;});
