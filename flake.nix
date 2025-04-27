@@ -62,10 +62,9 @@
             theme = {
               name = "material";
               features = ["content.code.copy" "content.action.edit"];
-              icon = {
-                logo = "simple/kubernetes";
-                repo = "simple/gitlab";
-              };
+              icon.repo = "simple/gitlab";
+              logo = "images/logo.png";
+              favicon = "images/favicon.png";
               palette = [
                 {
                   scheme = "default";
