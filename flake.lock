@@ -221,6 +221,21 @@
         "type": "github"
       }
     },
+    "mkdocs-material-umami": {
+      "locked": {
+        "lastModified": 1745163020,
+        "narHash": "sha256-eYKx9b50bRbTHSbGusEB3HECJwZvLshW1SavFkN0foE=",
+        "owner": "technofab",
+        "repo": "mkdocs-material-umami",
+        "rev": "e09ad45e921b8c1a30a47d599dcb8e8cb4468200",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "technofab",
+        "repo": "mkdocs-material-umami",
+        "type": "gitlab"
+      }
+    },
     "nix": {
       "inputs": {
         "flake-compat": [
@@ -269,6 +284,23 @@
         "owner": "TECHNOFAB",
         "ref": "feat/v2",
         "repo": "nix-gitlab-ci",
+        "type": "gitlab"
+      }
+    },
+    "nix-mkdocs": {
+      "locked": {
+        "dir": "lib",
+        "lastModified": 1745501687,
+        "narHash": "sha256-v0BE519o4zjZ8I7ZULjjIIj7HG5NPFo9JCO0HqyiEec=",
+        "owner": "TECHNOFAB",
+        "repo": "nixmkdocs",
+        "rev": "6c4bff339003ab0197a6dda96eea847996f21a63",
+        "type": "gitlab"
+      },
+      "original": {
+        "dir": "lib",
+        "owner": "TECHNOFAB",
+        "repo": "nixmkdocs",
         "type": "gitlab"
       }
     },
@@ -402,7 +434,9 @@
         "flake-parts": "flake-parts_2",
         "git-hooks": "git-hooks",
         "kubenix": "kubenix",
+        "mkdocs-material-umami": "mkdocs-material-umami",
         "nix-gitlab-ci": "nix-gitlab-ci",
+        "nix-mkdocs": "nix-mkdocs",
         "nixpkgs": "nixpkgs_5",
         "systems": "systems_2",
         "treefmt-nix": "treefmt-nix"

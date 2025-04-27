@@ -15,6 +15,7 @@
       imports = [
         inputs.devenv.flakeModule
         inputs.nix-gitlab-ci.flakeModule
+        inputs.nix-mkdocs.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
       systems = import systems;
@@ -47,6 +48,84 @@
           pre-commit.hooks.treefmt = {
             enable = true;
             packageOverrides.treefmt = config.treefmt.build.wrapper;
+          };
+        };
+
+        doc = {
+          path = ./docs;
+          deps = pp: [pp.mkdocs-material (pp.callPackage inputs.mkdocs-material-umami {})];
+          config = {
+            site_name = "Nixlets";
+            repo_name = "TECHNOFAB/nixlets";
+            repo_url = "https://gitlab.com/TECHNOFAB/nixlets";
+            edit_uri = "edit/main/docs/";
+            theme = {
+              name = "material";
+              features = ["content.code.copy" "content.action.edit"];
+              icon = {
+                logo = "simple/kubernetes";
+                repo = "simple/gitlab";
+              };
+              palette = [
+                {
+                  scheme = "default";
+                  media = "(prefers-color-scheme: light)";
+                  primary = "blue";
+                  accent = "light blue";
+                  toggle = {
+                    icon = "material/brightness-7";
+                    name = "Switch to dark mode";
+                  };
+                }
+                {
+                  scheme = "slate";
+                  media = "(prefers-color-scheme: dark)";
+                  primary = "blue";
+                  accent = "light blue";
+                  toggle = {
+                    icon = "material/brightness-4";
+                    name = "Switch to light mode";
+                  };
+                }
+              ];
+            };
+            plugins = ["search" "material-umami"];
+            nav = [
+              {
+                "Introduction" = "index.md";
+              }
+            ];
+            markdown_extensions = [
+              {
+                "pymdownx.highlight".pygments_lang_class = true;
+              }
+              "pymdownx.inlinehilite"
+              "pymdownx.snippets"
+              "pymdownx.superfences"
+              "fenced_code"
+            ];
+            extra.analytics = {
+              provider = "umami";
+              site_id = "a4181010-317a-45e3-978c-5d07a93e0cd2";
+              src = "https://analytics.tf/umami";
+              feedback = {
+                title = "Was this page helpful?";
+                ratings = [
+                  {
+                    icon = "material/thumb-up-outline";
+                    name = "This page is helpful";
+                    data = "good";
+                    note = "Thanks for your feedback!";
+                  }
+                  {
+                    icon = "material/thumb-down-outline";
+                    name = "This page could be improved";
+                    data = "bad";
+                    note = "Thanks for your feedback!";
+                  }
+                ];
+              };
+            };
           };
         };
 
@@ -93,6 +172,8 @@
     git-hooks.url = "github:cachix/git-hooks.nix";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci/feat/v2?dir=lib";
+    nix-mkdocs.url = "gitlab:TECHNOFAB/nixmkdocs?dir=lib";
+    mkdocs-material-umami.url = "gitlab:technofab/mkdocs-material-umami";
 
     kubenix = {
       url = "github:TECHNOFAB11/kubenix";
