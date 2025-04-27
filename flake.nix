@@ -92,7 +92,7 @@
     };
     git-hooks.url = "github:cachix/git-hooks.nix";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci?dir=lib";
+    nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci/feat/v2?dir=lib";
 
     kubenix = {
       url = "github:TECHNOFAB11/kubenix";

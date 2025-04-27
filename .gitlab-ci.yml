@@ -1,4 +1,5 @@
 include:
-  - project: TECHNOFAB/nix-gitlab-ci
-    ref: main
-    file: gitlab-ci.yml
+  - component: gitlab.com/TECHNOFAB/nix-gitlab-ci/nix-gitlab-ci@feat/v2
+    inputs:
+      version: feat-v2
+
