@@ -2,4 +2,5 @@ include:
   - component: gitlab.com/TECHNOFAB/nix-gitlab-ci/nix-gitlab-ci@feat/v2
     inputs:
       version: feat-v2
+      cache_files: ["ci.nix", "flake.*"]
 
