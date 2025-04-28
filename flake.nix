@@ -38,6 +38,13 @@
             alejandra.enable = true;
             mdformat.enable = true;
           };
+          settings.formatter.mdformat.command = let
+            pkg = pkgs.python3.withPackages (p: [
+              p.mdformat
+              p.mdformat-mkdocs
+            ]);
+          in
+            lib.mkForce "${pkg}/bin/mdformat";
         };
         devenv.shells.default = {
           containers = lib.mkForce {};
@@ -90,9 +97,11 @@
             };
             plugins = ["search" "material-umami"];
             nav = [
-              {
-                "Introduction" = "index.md";
-              }
+              {"Introduction" = "index.md";}
+              {"Creating Nixlets" = "creation.md";}
+              {"Packaging" = "packaging.md";}
+              {"Usage" = "usage.md";}
+              {"Secrets" = "secrets.md";}
             ];
             markdown_extensions = [
               {
@@ -102,6 +111,7 @@
               "pymdownx.snippets"
               "pymdownx.superfences"
               "fenced_code"
+              "admonition"
             ];
             extra.analytics = {
               provider = "umami";
