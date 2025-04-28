@@ -117,6 +117,7 @@
               provider = "umami";
               site_id = "a4181010-317a-45e3-978c-5d07a93e0cd2";
               src = "https://analytics.tf/umami";
+              domains = "nixlets.projects.tf";
               feedback = {
                 title = "Was this page helpful?";
                 ratings = [
