@@ -181,7 +181,7 @@
     };
     git-hooks.url = "github:cachix/git-hooks.nix";
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci/feat/v2?dir=lib";
+    nix-gitlab-ci.url = "gitlab:TECHNOFAB/nix-gitlab-ci/2.1.0?dir=lib";
     nix-mkdocs.url = "gitlab:TECHNOFAB/nixmkdocs?dir=lib";
     mkdocs-material-umami.url = "gitlab:technofab/mkdocs-material-umami";
 
