@@ -4,24 +4,23 @@
   ...
 } @ attrs:
 with lib; rec {
-  mkValues = file: {rawValues, ...} @ args:
-    (lib.evalModules {
-      specialArgs = {
-        utils = import ./utils.nix attrs;
-      };
-      modules = [
-        file
-        ({...}: {
-          # pass through all args to the values.nix module
-          config =
-            rawValues
-            // {
-              _module.args = args;
-            };
-        })
-      ];
-    })
-    .config;
+  evalValues = file: {rawValues, ...} @ args: (lib.evalModules {
+    specialArgs = {
+      utils = import ./utils.nix attrs;
+    };
+    modules = [
+      file
+      ({...}: {
+        # pass through all args to the values.nix module
+        config =
+          rawValues
+          // {
+            _module.args = args;
+          };
+      })
+    ];
+  });
+  mkValues = file: args: (evalValues file args).config;
 
   # wraps mkNixletInner to allow passing either a path or an attrset
   mkNixlet = arg:
@@ -44,60 +43,70 @@ with lib; rec {
     description ? "",
     defaultProject ? null,
     ...
-  }: rec {
-    inherit name version description path;
-    eval = {
-      system,
-      project ? defaultProject,
-      overrides ? ({...}: {}),
-      values ? {},
-    }:
-      assert lib.assertMsg (project != null) "No default project set, please pass a project to the render method"; let
-        # every nixlet gets "nixlet" as arg with some useful data about itself
-        nixletArg = {
-          inherit name project version description;
-        };
-      in (kubenix.evalModules.${system} {
-        module = {kubenix, ...}: {
-          imports = with kubenix.modules; [
-            k8s
-            helm
-            docker
-            files
-            ./secretsModule.nix
-            ({...}: let
-              finalValues = mkValues "${path}/values.nix" {
-                rawValues = values;
-                nixlet = nixletArg;
-              };
-            in {
-              imports = [path];
-              _module.args.nixlet =
-                {
-                  values = finalValues;
-                }
-                // nixletArg;
-            })
-            overrides
-          ];
-          kubenix.project = project;
-        };
-      });
-    render = {
-      system,
-      project ? defaultProject,
-      overrides ? ({...}: {}),
-      values ? {},
-    }:
-      (eval {
-        inherit system project overrides values;
-      })
-      .config
-      .kubernetes
-      .resultYAML;
-    # combines all secrets files in a single directory
-    secrets = args: (eval args).config.kubernetes.secretsCombined;
-  };
+  }: let
+    # every nixlet gets "nixlet" as arg with some useful data about itself
+    baseNixletArg = {
+      inherit name version description;
+      project = defaultProject;
+    };
+    nixlet = {
+      inherit name version description path;
+      values = evalValues "${path}/values.nix" {
+        rawValues = {};
+        nixlet = baseNixletArg;
+      };
+      mkDocs = opts: mkDocs (opts // {inherit nixlet;});
+      eval = {
+        system,
+        project ? defaultProject,
+        overrides ? ({...}: {}),
+        values ? {},
+      }:
+        assert lib.assertMsg (project != null) "No default project set, please pass a project to the render method"; let
+          nixletArg = baseNixletArg // {inherit project;};
+        in (kubenix.evalModules.${system} {
+          module = {kubenix, ...}: {
+            imports = with kubenix.modules; [
+              k8s
+              helm
+              docker
+              files
+              ./secretsModule.nix
+              ({...}: let
+                finalValues = mkValues "${path}/values.nix" {
+                  rawValues = values;
+                  nixlet = nixletArg;
+                };
+              in {
+                imports = [path];
+                _module.args.nixlet =
+                  {
+                    values = finalValues;
+                  }
+                  // nixletArg;
+              })
+              overrides
+            ];
+            kubenix.project = project;
+          };
+        });
+      render = {
+        system,
+        project ? defaultProject,
+        overrides ? ({...}: {}),
+        values ? {},
+      }:
+        (nixlet.eval {
+          inherit system project overrides values;
+        })
+        .config
+        .kubernetes
+        .resultYAML;
+      # combines all secrets files in a single directory
+      secrets = args: (nixlet.eval args).config.kubernetes.secretsCombined;
+    };
+  in
+    nixlet;
 
   fetchNixlet = url: sha256: mkNixlet (builtins.fetchTarball {inherit url sha256;});
   fetchNixletFromGitlab = {
@@ -140,4 +149,7 @@ with lib; rec {
         nixlets
       )
     );
+
+  mkDocs = {nixlet, ...} @ opts:
+    import ./valuesDocs.nix (opts // {inherit lib;});
 }

@@ -60,7 +60,23 @@
 
         doc = {
           path = ./docs;
-          deps = pp: [pp.mkdocs-material (pp.callPackage inputs.mkdocs-material-umami {})];
+          deps = pp: [
+            pp.mkdocs-material
+            (pp.callPackage inputs.mkdocs-material-umami {})
+            (pp.buildPythonPackage rec {
+              pname = "mkdocs-gen-files";
+              version = "0.5.0";
+              pyproject = true;
+              build-system = [pp.hatchling];
+              src = pkgs.fetchFromGitHub {
+                owner = "oprypin";
+                repo = "mkdocs-gen-files";
+                rev = "v${version}";
+                hash = "sha256-nRRdY7/en42s4PmHH+9vccRIl4pIp1F/Ka1bYvSHpBw=";
+              };
+              dependencies = [pp.mkdocs];
+            })
+          ];
           config = {
             site_name = "Nixlets";
             repo_name = "TECHNOFAB/nixlets";
@@ -95,13 +111,41 @@
                 }
               ];
             };
-            plugins = ["search" "material-umami"];
+            plugins = [
+              "search"
+              "material-umami"
+              {
+                # bit hacky, but works :D
+                "gen-files".scripts = let
+                  docsEntries = builtins.toJSON (builtins.mapAttrs (n: v: v.mkDocs {}) self.nixlets);
+                in [
+                  (builtins.toFile "gen.py"
+                    # py
+                    ''
+                      import mkdocs_gen_files, json
+                      data = json.loads('${docsEntries}')
+                      for name, file in data.items():
+                        with open(file, 'r') as infile:
+                          content = infile.read()
+                        with mkdocs_gen_files.open(f"options/{name}.md", "w") as outfile:
+                          outfile.write(content)
+                    '')
+                ];
+              }
+            ];
             nav = [
               {"Introduction" = "index.md";}
               {"Creating Nixlets" = "creation.md";}
               {"Packaging" = "packaging.md";}
               {"Usage" = "usage.md";}
               {"Secrets" = "secrets.md";}
+              {
+                "Nixlets Values" =
+                  lib.mapAttrsToList (n: v: {
+                    ${v.name} = "options/${n}.md";
+                  })
+                  self.nixlets;
+              }
             ];
             markdown_extensions = [
               {
