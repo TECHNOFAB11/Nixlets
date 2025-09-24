@@ -58,11 +58,9 @@
           };
         };
 
-        doc = {
+        docs."default".config = {
           path = ./docs;
           deps = pp: [
-            pp.mkdocs-material
-            (pp.callPackage inputs.mkdocs-material-umami {})
             (pp.buildPythonPackage rec {
               pname = "mkdocs-gen-files";
               version = "0.5.0";
@@ -77,43 +75,31 @@
               dependencies = [pp.mkdocs];
             })
           ];
+          material = {
+            enable = true;
+            colors = {
+              primary = "blue";
+              accent = "light blue";
+            };
+            umami = {
+              enable = true;
+              src = "https://analytics.tf/umami";
+              siteId = "a4181010-317a-45e3-978c-5d07a93e0cd2";
+              domains = ["nixlets.projects.tf"];
+            };
+          };
           config = {
             site_name = "Nixlets";
+            site_url = "https://nixlets.projects.tf";
             repo_name = "TECHNOFAB/nixlets";
             repo_url = "https://gitlab.com/TECHNOFAB/nixlets";
-            edit_uri = "edit/main/docs/";
+            extra_css = ["style.css"];
             theme = {
-              name = "material";
-              features = ["content.code.copy" "content.action.edit"];
               icon.repo = "simple/gitlab";
-              logo = "images/logo.png";
-              favicon = "images/favicon.png";
-              palette = [
-                {
-                  scheme = "default";
-                  media = "(prefers-color-scheme: light)";
-                  primary = "blue";
-                  accent = "light blue";
-                  toggle = {
-                    icon = "material/brightness-7";
-                    name = "Switch to dark mode";
-                  };
-                }
-                {
-                  scheme = "slate";
-                  media = "(prefers-color-scheme: dark)";
-                  primary = "blue";
-                  accent = "light blue";
-                  toggle = {
-                    icon = "material/brightness-4";
-                    name = "Switch to light mode";
-                  };
-                }
-              ];
+              logo = "images/logo.svg";
+              favicon = "images/logo.svg";
             };
             plugins = [
-              "search"
-              "material-umami"
               {
                 # bit hacky, but works :D
                 "gen-files".scripts = let
@@ -157,29 +143,6 @@
               "fenced_code"
               "admonition"
             ];
-            extra.analytics = {
-              provider = "umami";
-              site_id = "a4181010-317a-45e3-978c-5d07a93e0cd2";
-              src = "https://analytics.tf/umami";
-              domains = "nixlets.projects.tf";
-              feedback = {
-                title = "Was this page helpful?";
-                ratings = [
-                  {
-                    icon = "material/thumb-up-outline";
-                    name = "This page is helpful";
-                    data = "good";
-                    note = "Thanks for your feedback!";
-                  }
-                  {
-                    icon = "material/thumb-down-outline";
-                    name = "This page could be improved";
-                    data = "bad";
-                    note = "Thanks for your feedback!";
-                  }
-                ];
-              };
-            };
           };
         };
 
