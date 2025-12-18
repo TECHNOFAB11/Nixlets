@@ -10,7 +10,7 @@ with nixlet; {
             port = 8080;
           }
         ];
-        type = values.service.type;
+        inherit (values.service) type;
       };
     };
   };

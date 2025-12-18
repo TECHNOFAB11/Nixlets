@@ -7,11 +7,11 @@ with nixlet; {
         ports = [
           {
             name = "tcp";
-            port = values.service.port;
+            inherit (values.service) port;
             targetPort = 5432;
           }
         ];
-        type = values.service.type;
+        inherit (values.service) type;
       };
     };
   };

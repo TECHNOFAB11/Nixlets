@@ -1,4 +1,4 @@
-{nixlet, ...}: {
+{...}: {
   imports = [
     # import other files here
   ];

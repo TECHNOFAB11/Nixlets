@@ -10,7 +10,7 @@ with lib; rec {
     };
     modules = [
       file
-      ({...}: {
+      (_: {
         # pass through all args to the values.nix module
         config =
           rawValues
@@ -59,41 +59,42 @@ with lib; rec {
       eval = {
         system,
         project ? defaultProject,
-        overrides ? ({...}: {}),
+        overrides ? (_: {}),
         values ? {},
       }:
         assert lib.assertMsg (project != null) "No default project set, please pass a project to the render method"; let
           nixletArg = baseNixletArg // {inherit project;};
-        in (kubenix.evalModules.${system} {
-          module = {kubenix, ...}: {
-            imports = with kubenix.modules; [
-              k8s
-              helm
-              docker
-              files
-              ./secretsModule.nix
-              ({...}: let
-                finalValues = mkValues "${path}/values.nix" {
-                  rawValues = values;
-                  nixlet = nixletArg;
-                };
-              in {
-                imports = [path];
-                _module.args.nixlet =
-                  {
-                    values = finalValues;
-                  }
-                  // nixletArg;
-              })
-              overrides
-            ];
-            kubenix.project = project;
+        in
+          kubenix.evalModules.${system} {
+            module = {kubenix, ...}: {
+              imports = with kubenix.modules; [
+                k8s
+                helm
+                docker
+                files
+                ./secretsModule.nix
+                (_: let
+                  finalValues = mkValues "${path}/values.nix" {
+                    rawValues = values;
+                    nixlet = nixletArg;
+                  };
+                in {
+                  imports = [path];
+                  _module.args.nixlet =
+                    {
+                      values = finalValues;
+                    }
+                    // nixletArg;
+                })
+                overrides
+              ];
+              kubenix.project = project;
+            };
           };
-        });
       render = {
         system,
         project ? defaultProject,
-        overrides ? ({...}: {}),
+        overrides ? (_: {}),
         values ? {},
       }:
         (nixlet.eval {
@@ -150,6 +151,6 @@ with lib; rec {
       )
     );
 
-  mkDocs = {nixlet, ...} @ opts:
+  mkDocs = opts:
     import ./valuesDocs.nix (opts // {inherit lib;});
 }

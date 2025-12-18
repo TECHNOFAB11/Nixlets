@@ -7,11 +7,11 @@ with nixlet; {
         ports = [
           {
             name = "mqtt";
-            port = values.service.port;
+            inherit (values.service) port;
             targetPort = 1883;
           }
         ];
-        type = values.service.type;
+        inherit (values.service) type;
       };
     };
   };
