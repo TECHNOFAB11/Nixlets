@@ -8,10 +8,10 @@ with nixlet; {
           {
             name = "http";
             targetPort = "http";
-            port = values.service.port;
+            inherit (values.service) port;
           }
         ];
-        type = values.service.type;
+        inherit (values.service) type;
       };
     };
   };

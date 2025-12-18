@@ -10,7 +10,7 @@ with nixlet; {
         ports = [
           {
             name = "pd-server";
-            port = values.pd.service.port;
+            inherit (values.pd.service) port;
           }
           {
             name = "peer";
@@ -29,7 +29,7 @@ with nixlet; {
         ports = [
           {
             name = "peer";
-            port = values.tikv.service.port;
+            inherit (values.tikv.service) port;
           }
         ];
         type = "ClusterIP";
@@ -44,10 +44,10 @@ with nixlet; {
         ports = [
           {
             name = "server";
-            port = values.pd.service.port;
+            inherit (values.pd.service) port;
           }
         ];
-        type = values.pd.service.type;
+        inherit (values.pd.service) type;
       };
     };
   };

@@ -30,6 +30,7 @@ In GitLab CI this should for example be `JOB-TOKEN: $CI_JOB_TOKEN`.
 A personal access token requires this format instead: `PRIVATE-TOKEN: <your token>`.
 
 !!! note
+
     The script only uploads a version once. If the version already exists it will skip that Nixlet.
 
 ## General

@@ -31,7 +31,7 @@
 
   optionsNix = builtins.listToAttrs (
     map (o: {
-      name = o.name;
+      inherit (o) name;
       value = removeAttrs o [
         "visible"
         "internal"
@@ -76,9 +76,9 @@
     '')
     + "\n";
 
-  opts = mapAttrsToList (name: opt:
-    optToMd opt)
-  optionsNix;
+  opts =
+    mapAttrsToList (_name: optToMd)
+    optionsNix;
   markdown = concatStringsSep "\n" opts;
 in
   builtins.toFile "values-doc.md" markdown
