@@ -43,6 +43,7 @@ in
           {"Creating Nixlets" = "creation.md";}
           {"Packaging" = "packaging.md";}
           {"Usage" = "usage.md";}
+          {"Generating Docs" = "generating_docs.md";}
           {"Secrets" = "secrets.md";}
         ];
         markdown_extensions = [
