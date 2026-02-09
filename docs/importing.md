@@ -22,7 +22,6 @@ You can pre-define values for dependency Nixlets like this:
   options = {
     # options for the current Nixlet
   };
-  # overwriting the default of dependency Nixlets (the user can still overwrite this)
+  # overwriting the default of dependency Nixlets (the user can still overwrite this using mkForce for example)
   config."postgres".replicaCount = 10;
 ```
-

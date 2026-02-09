@@ -3,11 +3,14 @@
   ntlib,
   nixlet-lib,
   ...
-}: {
+}: let
+  inherit (pkgs.lib) mkForce;
+in {
   suites."Lib Tests" = {
     pos = __curPos;
     tests = let
       nixlet = nixlet-lib.mkNixlet ./fixtures/example;
+      depNixlet = nixlet-lib.mkNixlet ./fixtures/dependency;
     in [
       {
         name = "mkNixlet fail on nonexistant nixlet.nix";
@@ -41,6 +44,27 @@
             assert_file_contains "${docs}" "Some description."
             assert_file_contains "${docs}" '"Hello world!"'
           '';
+      }
+      {
+        name = "Nixlet dependencies";
+        expected = "Hello dependency!";
+        actual = let
+          evaled = depNixlet.eval {inherit (pkgs.stdenv.hostPlatform) system;};
+        in
+          evaled.config.kubernetes.resources.configMaps."test".data."test";
+      }
+      {
+        name = "Nixlet dependency value override";
+        expected = "Hello override!";
+        actual = let
+          evaled = depNixlet.eval {
+            inherit (pkgs.stdenv.hostPlatform) system;
+            values = {
+              "example".example = mkForce "Hello override!";
+            };
+          };
+        in
+          evaled.config.kubernetes.resources.configMaps."test".data."test";
       }
     ];
   };
