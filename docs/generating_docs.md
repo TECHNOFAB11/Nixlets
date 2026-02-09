@@ -11,6 +11,7 @@ This is all that's needed:
 ```nix
 (<nixlet>).mkDocs {
 # Params:
+#  fullValues ? false,
 #  transformOptions ? opt: opt,
 #  filter ? _: true,
 #  headingDepth ? 3,
@@ -34,5 +35,20 @@ string
 
 ```nix
 "Hello world!"
+```
+````
+
+The `fullValues` param controls whether the docs should include dependency Nixlets.
+For example, when defining `postgres` as a dependency, by default the docs would not
+include these options. If it's `true`, everything is included.
+
+Dependency Nixlets' options which you override from your own `values.nix` will show both
+default values:
+
+````md
+**Overridden value**:
+
+```nix
+<the overridden value set in values.nix>
 ```
 ````

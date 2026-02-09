@@ -61,6 +61,7 @@ in
           {"Creating Nixlets" = "creation.md";}
           {"Packaging" = "packaging.md";}
           {"Usage" = "usage.md";}
+          {"Importing" = "importing.md";}
           {"Generating Docs" = "generating_docs.md";}
           {"Secrets" = "secrets.md";}
           {"Options" = "options.md";}
