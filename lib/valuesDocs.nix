@@ -1,6 +1,8 @@
 {
   lib,
   nixlet,
+  # whether to generate docs for the full values, including dependencies
+  fullValues ? false,
   transformOptions ? opt: opt,
   filter ? _: true,
   headingDepth ? 3,
@@ -13,7 +15,12 @@
     mapAttrsToList
     concatStrings
     replicate
+    optionalString
+    optionAttrSetToDocList
+    attrByPath
+    generators
     ;
+  inherit (generators) toPretty;
 
   _transformOptions = opt:
     transformOptions (opt
@@ -25,7 +32,12 @@
         name = lib.removePrefix "config." opt.name;
       });
 
-  rawOpts = lib.optionAttrSetToDocList nixlet.values.options;
+  valueSource =
+    if fullValues
+    # TODO: get rid of system, just here cuz of kubenix
+    then (nixlet.fullValues {system = "x86_64-linux";})
+    else nixlet.values;
+  rawOpts = optionAttrSetToDocList valueSource.options;
   transformedOpts = map _transformOptions rawOpts;
   filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
 
@@ -58,7 +70,20 @@
       ${opt.type}
       ```
     ''
-    + (lib.optionalString (opt ? default && opt.default != null) ''
+    # used to show what changes a nixlet did to values of dependencies
+    + (let
+      val = toPretty {} (attrByPath opt.loc "_not found_" valueSource.config);
+      default = removeSuffix "\n" opt.default.text;
+    in
+      optionalString (opt.type != "submodule" && val != default)
+      ''
+        **Overridden value**:
+
+        ```nix
+        ${val}
+        ```
+      '')
+    + (optionalString (opt ? default && opt.default != null) ''
 
       **Default value**:
 
@@ -66,7 +91,7 @@
       ${removeSuffix "\n" opt.default.text}
       ```
     '')
-    + (lib.optionalString (opt ? example) ''
+    + (optionalString (opt ? example) ''
 
       **Example value**:
 

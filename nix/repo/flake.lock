@@ -38,11 +38,11 @@
     "nixmkdocs-lib": {
       "locked": {
         "dir": "lib",
-        "lastModified": 1766062227,
-        "narHash": "sha256-jhr5CUi9eDeMIAJn7ayXP8Wr+Y2loV5EhdDIKDkRIdw=",
+        "lastModified": 1767549915,
+        "narHash": "sha256-by3r2qddlyzylup5fzSaDwtoy3eFHNKb65IuIq6bsAs=",
         "owner": "TECHNOFAB",
         "repo": "nixmkdocs",
-        "rev": "cb0bb5dc3382e8ba5d81324a2f1fd94ccd5a5df4",
+        "rev": "f3b2f4b19178e97c5580367be0f97e61a085db6d",
         "type": "gitlab"
       },
       "original": {
