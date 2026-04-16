@@ -174,7 +174,6 @@
           .resultYAML;
         # combines all secrets files in a single directory
         secrets = args: (nixlet.eval args).config.kubernetes.secretsCombined;
-
       };
     in
       nixlet;
@@ -203,22 +202,21 @@
             exit 1
           fi
         ''
-        + concatMapStringsSep "\n" (
-          (nixlet:
-            with nixlet; ''
-              URL="https://gitlab.com/api/v4/projects/${projectId}/packages/generic/${name}/${version}/${name}.tar.gz"
-              if ${pkgs.curl}/bin/curl --output /dev/null --silent --head --fail --header "$AUTH_HEADER" $URL; then
-                echo "> Skipped ${name}@${version} because it already exists in the Package Registry"
-              else
-                echo "> Uploading new version ${name}@${version}"
-                ${pkgs.gnutar}/bin/tar -czf /tmp/${name}.tar.gz --mode='u+rwX' -C ${path} --transform 's/^\./\/${name}/' .
-                ${pkgs.curl}/bin/curl --header "$AUTH_HEADER" --upload-file "/tmp/${name}.tar.gz" "$URL"; echo;
-                ${pkgs.coreutils}/bin/rm -f /tmp/${nixlet.name}.tar.gz
-                echo "> Finished ${name}@${version}, see above"
-              fi
-            '')
-          nixlets
-        )
+        + concatMapStringsSep "\n"
+        (nixlet:
+          with nixlet; ''
+            URL="https://gitlab.com/api/v4/projects/${projectId}/packages/generic/${name}/${version}/${name}.tar.gz"
+            if ${pkgs.curl}/bin/curl --output /dev/null --silent --head --fail --header "$AUTH_HEADER" $URL; then
+              echo "> Skipped ${name}@${version} because it already exists in the Package Registry"
+            else
+              echo "> Uploading new version ${name}@${version}"
+              ${pkgs.gnutar}/bin/tar -czf /tmp/${name}.tar.gz --mode='u+rwX' -C ${path} --transform 's/^\./\/${name}/' .
+              ${pkgs.curl}/bin/curl --header "$AUTH_HEADER" --upload-file "/tmp/${name}.tar.gz" "$URL"; echo;
+              ${pkgs.coreutils}/bin/rm -f /tmp/${nixlet.name}.tar.gz
+              echo "> Finished ${name}@${version}, see above"
+            fi
+          '')
+        nixlets
       );
 
     mkDocs = opts:
