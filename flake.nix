@@ -1,7 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    ren.url = "gitlab:rensa-nix/core?dir=lib";
+    ren.url = "gitlab:rensa-nix/core/v0.2.0?dir=lib";
     kubenix = {
       url = "github:TECHNOFAB11/kubenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -22,15 +22,6 @@
         // {
           pkgs = import i.nixpkgs {inherit system;};
         };
-      cellBlocks = with ren.blocks; [
-        (simple "devShells")
-        (simple "ci")
-        (simple "docs")
-        (simple "soonix")
-        (simple "apps")
-        (simple "nixlets")
-        (simple "tests")
-      ];
     }
     {
       packages = ren.select self [
