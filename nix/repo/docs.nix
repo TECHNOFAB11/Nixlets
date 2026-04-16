@@ -3,8 +3,22 @@
   cell,
   ...
 }: let
-  inherit (inputs) doclib;
+  inherit (inputs) pkgs doclib nixlet-lib;
   inherit (cell) nixlets;
+
+  optionsDoc = doclib.mkOptionDocs {
+    module = nixlet-lib.nixletModule;
+    roots = [
+      {
+        url = "https://gitlab.com/TECHNOFAB/nixlets/-/blob/main/lib";
+        path = "${inputs.self}/lib";
+      }
+    ];
+  };
+  optionsDocs = pkgs.runCommand "options-docs" {} ''
+    mkdir -p $out
+    ln -s ${optionsDoc} $out/options.md
+  '';
 in
   (doclib.mkDocs {
     docs."default" = {
@@ -23,9 +37,13 @@ in
           domains = ["nixlets.projects.tf"];
         };
       };
+      macros = {
+        enable = true;
+        includeDir = toString optionsDocs;
+      };
       dynamic-nav = {
         enable = true;
-        files."Nixlets Values" = builtins.map (val: {${val.name} = val.mkDocs {};}) (builtins.attrValues nixlets);
+        files."Nixlets Values" = builtins.map (val: {${val.name} = val.mkDocs {fullValues = true;};}) (builtins.attrValues nixlets);
       };
       config = {
         site_name = "Nixlets";
@@ -43,8 +61,10 @@ in
           {"Creating Nixlets" = "creation.md";}
           {"Packaging" = "packaging.md";}
           {"Usage" = "usage.md";}
+          {"Importing" = "importing.md";}
           {"Generating Docs" = "generating_docs.md";}
           {"Secrets" = "secrets.md";}
+          {"Options" = "options.md";}
         ];
         markdown_extensions = [
           {
